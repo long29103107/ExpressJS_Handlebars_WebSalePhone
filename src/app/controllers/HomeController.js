@@ -1,6 +1,6 @@
-class HomeController{
-    index(req, res, next){
-        res.render('home');
+class HomeController {
+    index(req, res, next) {
+        res.render('user/home');
     }
 }
 
