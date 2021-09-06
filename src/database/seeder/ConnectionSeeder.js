@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-async function connect() {
-    try {
+module.exports = {
+    connect: async function () {
         const options = {
             useNewUrlParser: true,
             useUnifiedTopology: true,
@@ -9,9 +9,8 @@ async function connect() {
         };
 
         await mongoose.connect(process.env.DB_URL, options);
-        // console.log("success");
-    } catch (error) {
-        // console.log("fail");
-    }
-}
-module.exports = { connect };
+    },
+    exit: function () {
+        mongoose.disconnect();
+    },
+};

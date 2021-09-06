@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const autoIncrement = require('mongoose-auto-increment');
-const connection = mongoose.createConnection(process.env.DB_URI);
+const connection = mongoose.createConnection(process.env.DB_URL);
 autoIncrement.initialize(connection);
 
 module.exports = {
