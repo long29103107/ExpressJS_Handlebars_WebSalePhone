@@ -10,6 +10,7 @@ const ProductDetail = new Schema(
     },
     {
         timestamps: true,
+        collection: 'product_details',
     },
 );
 

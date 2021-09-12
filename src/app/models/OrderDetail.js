@@ -12,6 +12,7 @@ const OrderDetail = new Schema(
     },
     {
         timestamps: true,
+        collection: 'order_details',
     },
 );
 

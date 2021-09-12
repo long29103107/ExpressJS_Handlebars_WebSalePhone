@@ -5,15 +5,16 @@ const mongooseDelete = require('mongoose-delete');
 
 const Product = new Schema(
     {
-        brand_id: { type: String, required: true },
         name: { type: String, required: true },
         price: { type: Number, required: true },
         description: { type: String, required: true },
         slug: { type: String, required: true, unique: true },
         rating_star: { type: Number, required: true, default: 0 },
+        brand: { type: Schema.Types.Number, ref: 'Brand' },
     },
     {
         timestamps: true,
+        collection: 'products',
     },
 );
 

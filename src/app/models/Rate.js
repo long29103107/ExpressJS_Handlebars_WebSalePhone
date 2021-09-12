@@ -10,6 +10,7 @@ const Rate = new Schema(
     },
     {
         timestamps: true,
+        collection: 'rates',
     },
 );
 

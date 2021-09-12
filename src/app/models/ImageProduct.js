@@ -12,6 +12,7 @@ const ImageProduct = new Schema(
     },
     {
         timestamps: true,
+        collection: 'image_products',
     },
 );
 

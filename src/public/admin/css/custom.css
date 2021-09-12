@@ -1,0 +1,11 @@
+.cursor{
+    cursor: pointer;
+}
+#icon-delete
+{
+    display: none;
+}
+#icon-delete.active
+{
+    display: block;
+}

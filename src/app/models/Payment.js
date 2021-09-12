@@ -11,6 +11,7 @@ const Payment = new Schema(
     },
     {
         timestamps: true,
+        collection: 'payments',
     },
 );
 

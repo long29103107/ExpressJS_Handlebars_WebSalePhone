@@ -10,6 +10,7 @@ const AttributeDetail = new Schema(
     },
     {
         timestamps: true,
+        collection: 'attribute_details',
     },
 );
 

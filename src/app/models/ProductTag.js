@@ -10,6 +10,7 @@ const ProductTag = new Schema(
     },
     {
         timestamps: true,
+        collection: 'product_tags',
     },
 );
 

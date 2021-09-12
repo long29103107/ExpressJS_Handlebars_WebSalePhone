@@ -12,6 +12,7 @@ const Discount = new Schema(
     },
     {
         timestamps: true,
+        collection: 'discounts',
     },
 );
 

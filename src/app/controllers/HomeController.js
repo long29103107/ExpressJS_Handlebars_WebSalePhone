@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/User');
-
+const IdentityCounter = require('../models/IdentityCounter');
 class HomeController {
     index(req, res, next) {
         // const user = new User({
@@ -16,8 +16,8 @@ class HomeController {
         //     }
         //     // saved!
         // });
-        const user = User.find({}).exec();
-        console.log(user);
+        // const user = User.find({}).exec();
+        // console.log(user);
 
         // res.json(user);
 
