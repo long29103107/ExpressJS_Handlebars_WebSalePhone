@@ -28,18 +28,18 @@
     "prettier": "^2.3.2"
   },
   "dependencies": {
+    "async": "^3.2.1",
+    "body-parser": "^1.19.0",
     "dotenv": "^10.0.0",
     "faker": "^5.5.3",
     "g": "^2.0.1",
     "mongoose": "^6.0.4",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-delete": "^0.5.4",
+    "mongoose-relationship": "^0.1.5",
     "mongoose-seed": "^0.6.0",
     "mongoose-sequence": "^5.3.1",
-    "password-hash": "^1.2.2"
-  },
-  "mdSeed": {
-    "seedersFolder": "./src/seeders",
-    "customSeederTemplate": "./md-seed-template.ejs"
+    "password-hash": "^1.2.2",
+    "slug": "^5.1.0"
   }
 }

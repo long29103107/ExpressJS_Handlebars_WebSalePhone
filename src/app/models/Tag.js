@@ -10,6 +10,7 @@ const Tag = new Schema(
     },
     {
         timestamps: true,
+        collection: 'tags',
     },
 );
 

@@ -6,9 +6,12 @@ const mongooseDelete = require('mongoose-delete');
 const Brand = new Schema(
     {
         name: { type: String, required: true },
+        image: { type: String, require: true, default: null },
+        products: [{ type: Schema.Types.Number, ref: 'Product' }],
     },
     {
         timestamps: true,
+        collection: 'brands',
     },
 );
 

@@ -10,6 +10,7 @@ const Fee = new Schema(
     },
     {
         timestamps: true,
+        collection: 'users',
     },
 );
 

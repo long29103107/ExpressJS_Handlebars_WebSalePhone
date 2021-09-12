@@ -5,7 +5,7 @@ class DashboardController {
         //     if(!err) res.json(users);
         //     res.status(400).json({error: 'ERROR!!!!'});
         // });
-        res.render('admin/dashboard', { layout: 'admin' });
+        res.render('admin/dashboard/index', { layout: 'admin' });
     }
 }
 

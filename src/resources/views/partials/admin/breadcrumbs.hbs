@@ -1,0 +1,11 @@
+ <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+    <ol class="breadcrumb">
+        {{#each data.breadcrumbs}}
+            {{#if this.href includeZero=true}}
+            <li class="breadcrumb-item"><a href="{{ this.href }}">{{ this.title }}</a></li>
+            {{else}}
+            <li class="breadcrumb-item active" aria-current="page">{{ this.title }}</li>
+            {{/if}}
+        {{/each}}
+    </ol>
+</nav>

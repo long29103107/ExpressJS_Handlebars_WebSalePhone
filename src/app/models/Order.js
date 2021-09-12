@@ -11,6 +11,7 @@ const Order = new Schema(
     },
     {
         timestamps: true,
+        collection: 'orders',
     },
 );
 

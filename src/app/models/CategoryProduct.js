@@ -10,6 +10,7 @@ const CategoryProduct = new Schema(
     },
     {
         timestamps: true,
+        collection: 'category_products',
     },
 );
 
