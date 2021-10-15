@@ -1,5 +1,5 @@
 require('dotenv').config();
-const passwordHash = require('password-hash');
+const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const async = require('async');
 const faker = require('faker');
@@ -10,6 +10,7 @@ const CategoryProduct = require('../../app/models/CategoryProduct');
 const User = require('../../app/models/User');
 const Brand = require('../../app/models/Brand');
 const Product = require('../../app/models/Product');
+const Role = require('../../app/models/Role');
 
 const options = {
     useNewUrlParser: true,
@@ -21,25 +22,45 @@ const connection = mongoose.connect(process.env.DB_URL, options);
 
 let list = [
     {
+        model: 'Role',
+        data: [
+            {
+                name: 'user',
+            },
+            {
+                name: 'admin',
+            },
+        ],
+    },
+    {
         model: 'User',
         data: [
             {
-                fullname: 'Nguyễn Hoàng Long',
+                username: 'nguyenhoanglong',
                 email: 'long@gmail.com',
-                password: passwordHash.generate('12345678'),
+                password: bcrypt.hashSync('12345678', 8),
                 slug: 'nguyen-hoang-long',
+                phone: '0342343234',
+                active: true,
+                role: 0,
             },
             {
-                fullname: 'Huỳnh Thị Thuỳ Vương',
+                username: 'huynhthithuyvuong',
                 email: 'vuong@gmail.com',
-                password: passwordHash.generate('12345678'),
+                password: bcrypt.hashSync('12345678', 8),
                 slug: 'huynh-thi-thuy-vuong',
+                phone: '0342343234',
+                active: true,
+                role: 1,
             },
             {
-                fullname: 'Nguyễn Tấn Phúc',
+                username: 'nguyentanphuc',
                 email: 'phuc@gmail.com',
-                password: passwordHash.generate('12345678'),
+                password: bcrypt.hashSync('12345678', 8),
                 slug: 'nguyen-tan-phuc',
+                phone: '0342343234',
+                active: true,
+                role: 1,
             },
         ],
     },

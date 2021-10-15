@@ -5,4 +5,12 @@ module.exports = {
     mongooseToObject: function (mongoose) {
         return mongoose ? mongoose.toObject() : mongoose;
     },
+    getSelectedOption: function (array, id) {
+        return array.map((item) => {
+            if (item._id == id) {
+                item.selected = true;
+            }
+            return item;
+        });
+    },
 };

@@ -5,13 +5,15 @@ const autoIncrement = require('../../utils/mongoose-auto-increment');
 
 const User = new Schema(
     {
-        fullname: { type: String, required: true },
+        username: { type: String, required: true },
         email: { type: String, unique: true, required: true },
-        password: { type: String, required: true },
+        password: { type: String, default: null },
         user_image: { type: String, default: null },
         status: { type: Boolean, default: true },
         active: { type: Boolean, default: false },
         slug: { type: String, required: true },
+        phone: { type: String, default: null },
+        role: { type: Schema.Types.Number, ref: 'Role' },
     },
     {
         timestamps: true,
