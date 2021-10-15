@@ -1,0 +1,74 @@
+{{#section 'head'}}
+
+{{/section}}
+
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>{{#if user}}Edit User{{else}}Create User{{/if}}</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                {{> admin/breadcrumbs}}
+            </div>
+        </div>
+    </div>
+    <div id="show-error">
+        {{> message/message}}
+    </div>
+    <section class="section">
+        <div class="card">
+            <div class="card-body">
+                <form {{#if user}} action="/admin/user/update/{{user._id}}?_method=PUT" {{else}}
+                    action="/admin/user/store" {{/if}} method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Username</label>
+                                <input type="text" class="form-control" name="username" id="username" {{#if user}} value="{{user.username}}" {{/if}} placeholder="Enter username">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter email" {{#if user}} value="{{user.email}}" {{/if}}>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-3">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter phone" {{#if user}} value="{{user.phone}}" {{/if}}>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="brand">Role</label>
+                            <select class="form-select" id="role" name="role">
+                                {{#each listRole as | role |}}
+                                    <option {{#if this.selected}} selected {{/if}} value="{{this._id}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <button type="submit" class="btn-primary btn">Save</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </section>
+</div>
+{{#section 'script'}}
+{{!-- <script src="/admin/assets/vendors/ckeditor/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script> --}}
+{{/section}}

@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const autoIncrement = require('../../utils/mongoose-auto-increment');
 const mongooseDelete = require('mongoose-delete');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const Product = new Schema(
     {
@@ -18,6 +19,7 @@ const Product = new Schema(
     },
 );
 
+Product.plugin(mongoosePaginate);
 Product.plugin(mongooseDelete, { deletedAt: true, overrideMethods: 'all' });
 autoIncrement.AutoIncrement(Product, 'Product');
 

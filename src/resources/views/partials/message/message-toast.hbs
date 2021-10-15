@@ -1,0 +1,48 @@
+{{#if success}}
+      <script>
+          Toastify({
+            text: 'Success: {{success}}',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#4fbe87',
+        }).showToast();
+      </script>
+{{/if}}
+{{#if error}}
+    <script>
+          Toastify({
+            text: 'Error: {{error}}',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#f3616d',
+        }).showToast();
+    </script>
+{{/if}}
+{{#if warning}}
+    <script>
+          Toastify({
+            text: 'Warning: {{warning}}',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#eaca4a',
+        }).showToast();
+    </script>
+{{/if}}
+{{#if info}}
+    <script>
+          Toastify({
+            text: 'Info: {{info}}',
+            duration: 3000,
+            close: true,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#56b6f7',
+        }).showToast();
+    </script>
+{{/if}}

@@ -33,4 +33,21 @@ $('input[name="listCheckbox[]"]').change(function () {
 
     checkAll.prop('checked', isCheckAll);
     checkItemCheckboxChecked();
+
+    // console.log($(this).data('id'));
+});
+
+$('#icon-delete').click(function () {
+    let listCheckboxchecked = $('input[name="listCheckbox[]"]:checked');
+    let listId = [];
+
+    $.each(listCheckboxchecked, function (key, value) {
+        listId.push($(value).data('id'));
+    });
+
+    $('#listId').val(listId);
+});
+
+$('#btn-confirm').click(function () {
+    $('#form-delete').submit();
 });

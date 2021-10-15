@@ -4,8 +4,16 @@ const morgan = require('morgan');
 const app = express();
 const handlebars = require('express-handlebars');
 const handlebarsSections = require('express-handlebars-sections');
-const port = 3000;
+const port = process.env.PORT || 3000;
 const route = require('./routes');
+const registerHelper = require('./app/helpers/registerHelper');
+const publicPath = path.join(__dirname, '../views');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
+const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
 //Config .env
 require('dotenv').config();
@@ -20,6 +28,42 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Use morgan
 app.use(morgan('combined'));
 
+//Config body
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+//Use express session
+app.use(
+    session({
+        secret: 'shhhhhh',
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60,
+        },
+    }),
+);
+
+app.use(cookieParser());
+app.use(flash());
+
+//Override method
+app.use(methodOverride('_method'));
+
+// Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded());
+
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json());
+
+// app.get('/mail', function(req, res) {
+//     res.render('login/email', {
+//         title: 'Sign up',
+//         error: req.flash('error') ?? null,
+//         errors: req.flash('errors') ?? null,
+//         success: req.flash('success') ?? null,
+//     });
+// });
+
 //Create handlebar section
 const hbs = handlebars.create({});
 handlebarsSections(hbs);
@@ -33,23 +77,8 @@ app.engine(
     }),
 );
 
-//Create for loop helpers
-hbs.handlebars.registerHelper('for', function (from, to, incr, block) {
-    var data;
-
-    if (block.data) {
-        data = hbs.handlebars.createFrame(block.data);
-    }
-
-    var accum = '';
-    for (var i = from; i < to; i += incr) {
-        if (data) {
-            data.index = i;
-        }
-        accum += block.fn(i, { data: data });
-    }
-    return accum;
-});
+//Register helper
+registerHelper.run();
 
 //Set view engine handlebars
 app.set('view engine', 'hbs');

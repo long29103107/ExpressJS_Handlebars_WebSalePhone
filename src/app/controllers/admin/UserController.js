@@ -7,8 +7,10 @@ const errorHelper = require('../../../utils/error');
 const { check, validationResult } = require('express-validator');
 const shortid = require('shortid');
 const slug = require('slug');
+const User = require('../../models/User');
+const Role = require('../../models/Role');
 
-class ProductController {
+class UserController {
     async index(req, res, next) {
         try {
             const page = req.query.page ?? 1;
@@ -18,7 +20,7 @@ class ProductController {
             if (req.query.page < 1) {
                 res.redirect(req.baseUrl);
             }
-            const query = Product.find({});
+            const query = User.find({});
 
             switch (sort) {
                 case 'za':
@@ -38,19 +40,16 @@ class ProductController {
                     break;
             }
 
-            const listProduct = await query
-                .populate('brand')
+            const listUser = await query
+                .populate('role')
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .lean()
                 .exec();
 
-            const countProduct = await Product.count({});
+            const countUser = await User.count({});
 
-            const [products, itemCount] = await Promise.all([
-                listProduct,
-                countProduct,
-            ]);
+            const [users, itemCount] = await Promise.all([listUser, countUser]);
 
             const pageCount = patinate.getPageCount(itemCount, limit);
 
@@ -63,9 +62,9 @@ class ProductController {
                 pageCount,
                 req.query,
             );
-            // res.json({page: pageItem});
-            res.render('admin/product/index', {
-                products,
+
+            res.render('admin/user/index', {
+                users,
                 pagination: {
                     itemCount: itemCount,
                     pageCount: pageCount,
@@ -74,8 +73,8 @@ class ProductController {
                     previousHref: previousHref,
                     nextHref: nextHref,
                 },
-                isManageProduct: true,
-                isProduct: true,
+                isManageUser: true,
+                isUser: true,
                 sort,
                 breadcrumbs: [
                     {
@@ -83,7 +82,7 @@ class ProductController {
                         href: '/admin',
                     },
                     {
-                        title: 'Product',
+                        title: 'User',
                         // 'href': './',
                     },
                 ],
@@ -98,22 +97,22 @@ class ProductController {
 
     async create(req, res, next) {
         try {
-            const brands = await Brand.find({}).lean().exec();
+            const roles = await Role.find({}).lean().exec();
 
-            const [listBrand] = await Promise.all([brands]);
+            const [listRole] = await Promise.all([roles]);
 
-            res.render('admin/product/createOrEdit', {
-                listBrand,
-                isManageProduct: true,
-                isProduct: true,
+            res.render('admin/user/createOrEdit', {
+                listRole,
+                isManageUser: true,
+                isUser: true,
                 breadcrumbs: [
                     {
                         title: 'Home',
                         href: '/admin',
                     },
                     {
-                        title: 'Product',
-                        href: '/admin/product',
+                        title: 'User',
+                        href: '/admin/user  ',
                     },
                     {
                         title: 'Create',
@@ -132,20 +131,33 @@ class ProductController {
 
     async store(req, res, next) {
         try {
+            // console.log(req.body.username);
+            // console.log(req.body.username == 'long');
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 req.flash('errors', errors.errors);
-                return res.redirect('/admin/product/create');
+                return res.redirect('/admin/user/create');
+            }
+
+            const userCheck = await User.findOne({ email: req.body.email });
+
+            if (userCheck) {
+                req.flash('error', 'Email already in use');
+                return res.redirect('/admin/user/create');
             }
 
             const formData = req.body;
-            formData.slug = slug(formData.name) + '-' + shortid.generate();
+            formData.slug = slug(formData.username) + '-' + shortid.generate();
 
-            const product = new Product(formData);
-            await product.save();
+            const user = new User(formData);
+            await user.save((err, user) => {
+                if (err) {
+                    return next(err);
+                }
 
-            req.flash('success', 'Save product success !');
-            res.redirect('/admin/product');
+                req.flash('success', 'Save user success !');
+                return res.redirect('/admin/user');
+            });
         } catch (error) {
             next(error);
         }
@@ -154,54 +166,51 @@ class ProductController {
     async edit(req, res, next) {
         try {
             if (!req.params.id) {
-                req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                req.flash('error', 'User not found');
+                return res.redirect('/admin/user');
             }
-            let promiseProduct;
+            let promiseUser;
 
             if (isNaN(parseInt(req.params.id))) {
-                req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                req.flash('error', 'User not found');
+                return res.redirect('/admin/user');
             } else {
-                promiseProduct = await Product.findOne({ _id: req.params.id })
-                    .populate('brand')
+                promiseUser = await User.findOne({ _id: req.params.id })
+                    .populate('role')
                     .lean()
                     .exec();
 
-                if (!promiseProduct) {
-                    req.flash('error', 'Product not found');
-                    res.redirect('/admin/product');
-                    return;
+                if (!promiseUser) {
+                    req.flash('error', 'User not found');
+                    return res.redirect('/admin/user');
                 }
             }
 
-            const promiseBrands = await Brand.find({}).lean().exec();
+            const promiseRole = await Role.find({}).lean().exec();
 
-            let [listBrand, product] = await Promise.all([
-                promiseBrands,
-                promiseProduct,
+            let [listRole, user] = await Promise.all([
+                promiseRole,
+                promiseUser,
             ]);
 
-            listBrand = toolParseObject.getSelectedOption(
-                listBrand,
-                product.brand._id,
+            listRole = toolParseObject.getSelectedOption(
+                listRole,
+                user.role._id,
             );
 
-            res.render('admin/product/createOrEdit', {
-                listBrand,
-                product,
-                isManageProduct: true,
-                isProduct: true,
+            res.render('admin/user/createOrEdit', {
+                listRole,
+                user,
+                isManageUser: true,
+                isUser: true,
                 breadcrumbs: [
                     {
                         title: 'Home',
                         href: '/admin',
                     },
                     {
-                        title: 'Product',
-                        href: '/admin/product',
+                        title: 'User',
+                        href: '/admin/user',
                     },
                     {
                         title: 'Edit',
@@ -220,45 +229,50 @@ class ProductController {
 
     async update(req, res, next) {
         try {
+            // return res.json({res: req.body});
             //Check product item
             if (!req.params.id) {
-                req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                req.flash('error', 'User not found');
+                return res.redirect('/admin/user');
             }
-            let product;
+            let user;
 
             if (isNaN(parseInt(req.params.id))) {
-                req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                req.flash('error', 'User not found');
+                return res.redirect('/admin/user');
             } else {
-                product = await Product.findOne({ _id: req.params.id })
-                    .populate('brand')
+                user = await User.findOne({ _id: req.params.id })
+                    .populate('role')
                     .lean()
                     .exec();
 
-                if (!product) {
-                    req.flash('error', 'Product not found');
-                    res.redirect('/admin/product');
-                    return;
+                if (!user) {
+                    req.flash('error', 'User not found');
+                    return res.redirect('/admin/user');
                 }
             }
 
-            //Check form request
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 req.flash('errors', errors.errors);
-                res.redirect(`/admin/product/edit/${req.params.id}`);
+                res.redirect(`/admin/user/edit/${req.params.id}`);
             }
 
             const formData = req.body;
-            formData.slug = slug(formData.name) + '-' + shortid.generate();
+            formData.slug = slug(formData.username) + '-' + shortid.generate();
 
-            await Product.updateOne({ _id: req.params.id }, formData);
+            await User.updateOne(
+                { _id: req.params.id },
+                formData,
+                (err, user) => {
+                    if (err) {
+                        return next(err);
+                    }
 
-            req.flash('success', 'Save product success !');
-            res.redirect('/admin/product');
+                    req.flash('success', 'Save user success !');
+                    res.redirect('/admin/user');
+                },
+            );
         } catch (error) {
             next(error);
         }
@@ -277,4 +291,4 @@ class ProductController {
     }
 }
 
-module.exports = new ProductController();
+module.exports = new UserController();

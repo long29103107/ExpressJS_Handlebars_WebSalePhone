@@ -1,11 +1,14 @@
 const User = require('../../models/User');
 class DashboardController {
-    index(req, res, next) {
-        // User.find({}, function(err, users){
-        //     if(!err) res.json(users);
-        //     res.status(400).json({error: 'ERROR!!!!'});
-        // });
-        res.render('admin/dashboard/index', { layout: 'admin' });
+    async index(req, res, next) {
+        try {
+            res.render('admin/dashboard/index', {
+                isDashboard: true,
+                layout: 'admin',
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 }
 

@@ -1,18 +1,7 @@
 const mongoose = require('mongoose');
-const User = require('../models/User');
-const IdentityCounter = require('../models/IdentityCounter');
-const jwt = require('jsonwebtoken');
-class HomeController {
-    async index(req, res, next) {
-        try {
-            // const decode = jwt.verify(req.cookies.token, config.secret);
-            // const user = await User.findOne({_id: decode.id});
-            // console.log(user);
 
-            res.render('user/home', { layout: 'user' });
-        } catch (error) {
-            next(error);
-        }
+class ForgotPasswordController {
+    getForgotPassword(req, res, next) {
         // const user = new User({
         //     username: 'Long',
         //     email: 'long@gmail.com',
@@ -30,7 +19,12 @@ class HomeController {
         // console.log(user);
 
         // res.json(user);
+
+        res.render('login/forgot-password', {
+            layout: 'login',
+            title: 'Forgot password',
+        });
     }
 }
 
-module.exports = new HomeController();
+module.exports = new ForgotPasswordController();
