@@ -46,6 +46,7 @@ function route(app) {
             content: 'The page you are looking not found.',
         });
     });
+
     app.use((err, req, res, next) => {
         const statusCode = err.statusCode || 500;
 

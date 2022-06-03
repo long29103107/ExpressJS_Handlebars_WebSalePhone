@@ -223,15 +223,13 @@ class ProductController {
             //Check product item
             if (!req.params.id) {
                 req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                return res.redirect('/admin/product');
             }
             let product;
 
             if (isNaN(parseInt(req.params.id))) {
                 req.flash('error', 'Product not found');
-                res.redirect('/admin/product');
-                return;
+                return res.redirect('/admin/product');
             } else {
                 product = await Product.findOne({ _id: req.params.id })
                     .populate('brand')
@@ -240,8 +238,7 @@ class ProductController {
 
                 if (!product) {
                     req.flash('error', 'Product not found');
-                    res.redirect('/admin/product');
-                    return;
+                    return res.redirect('/admin/product');
                 }
             }
 
@@ -249,7 +246,7 @@ class ProductController {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
                 req.flash('errors', errors.errors);
-                res.redirect(`/admin/product/edit/${req.params.id}`);
+                return res.redirect(`/admin/product/edit/${req.params.id}`);
             }
 
             const formData = req.body;
@@ -258,7 +255,7 @@ class ProductController {
             await Product.updateOne({ _id: req.params.id }, formData);
 
             req.flash('success', 'Save product success !');
-            res.redirect('/admin/product');
+            return res.redirect('/admin/product');
         } catch (error) {
             next(error);
         }

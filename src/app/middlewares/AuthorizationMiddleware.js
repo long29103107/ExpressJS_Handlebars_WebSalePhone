@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../app/models/User');
-const fs = require('fs');
-const publicKey = fs.readFileSync('./key/publickey.crt');
 const error = require('../../utils/error');
 
 class AuthorizationMiddleware {

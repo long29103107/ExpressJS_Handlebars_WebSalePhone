@@ -13,6 +13,7 @@ class AuthMiddleWare {
 
             jwt.verify(token, process.env.TOKEN_KEY, (err, decoded) => {
                 if (err) {
+                    // res.json({err: err});
                     req.flash('info', 'Session has expired');
                     return res.clearCookie('token').redirect('/login');
                 }

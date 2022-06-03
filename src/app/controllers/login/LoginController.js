@@ -8,7 +8,7 @@ const { check, validationResult } = require('express-validator');
 class LoginController {
     async getLogin(req, res, next) {
         try {
-            res.render('login/login', {
+            return res.render('login/login', {
                 layout: 'login',
                 title: 'Login',
                 error: req.flash('error') ?? null,
@@ -56,6 +56,7 @@ class LoginController {
                 }
 
                 res.cookie('token', token);
+
                 if (user.role.name == 'admin') {
                     return res.redirect('/admin');
                 }
@@ -65,6 +66,7 @@ class LoginController {
             req.flash('error', 'Invalid account or password');
             return res.redirect('/login');
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
